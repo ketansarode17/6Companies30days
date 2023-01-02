@@ -1,0 +1,40 @@
+//DFS Approach-Cycle Detection
+class Solution {
+    private:
+    vector<bool>vis;
+    bool courseSchedule(int node,vector<int>graph[],vector<bool>&tempVis)
+    {
+        vis[node] = 1;
+		tempVis[node] = 1;
+		// traverse for adjacent nodes
+		for (auto it : graph[node]) {
+			// when the node is not visited
+			if (!vis[it]) {
+				if (courseSchedule(it, graph,tempVis) == true)
+					return true;
+			}
+			else if (tempVis[it]) {
+				return true;
+			}
+		}
+		tempVis[node] = 0;
+		return false;
+    }
+public:
+    bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
+        vector<int>graph[numCourses];
+        vis.resize(numCourses,false);
+        for(auto it:prerequisites)
+        {
+            graph[it[0]].push_back(it[1]);
+        }
+        bool res=false;
+        for(int i=0;i<numCourses;i++)
+        {
+            vector<bool>tempVis(numCourses,false);
+            if(!vis[i])res|=courseSchedule(i,graph,tempVis);
+            if(res)return false;
+        }
+        return true;
+    }
+};
