@@ -1,0 +1,74 @@
+https://leetcode.com/problems/most-profitable-path-in-a-tree/description/
+
+
+class Solution {
+    private:
+    vector<int>distFromRoot,par;
+    
+    //Dfs to calculate parents of all nodes and their distances from the root
+    //Distance from root will be helpful because Alice is starting from root.So we can figure out whether bob or alice is closest to a particular node.
+    //There is only one path possible for bob from current node to root as its a tree.
+    void dfs(int node,vector<int>graph[])
+    {
+        for(auto it:graph[node])
+        {
+            if(it==par[node])continue;
+            par[it]=node;
+            distFromRoot[it]=1+distFromRoot[node];
+            dfs(it,graph);
+        }
+    }
+    
+    //Update the amount array node value to zero where bob can reach first...
+    //Then the problem will boil down to finding max income of Alice from start node i.e.root(0).
+    
+    void updateAmount(vector<int>graph[],int node,vector<int>&amount)
+    {
+        int currBobDist=0;
+        while(node!=-1)
+        {
+            if(distFromRoot[node]>currBobDist)amount[node]=0;
+            else if(distFromRoot[node]==currBobDist)amount[node]/=2;
+            node=par[node];
+            currBobDist++;
+        }
+    }
+    
+    //Simple dfs to compute maximum distance.
+    int maxDistAlice(vector<int>graph[],vector<int>&amount,int node)
+    {
+        int ans=INT_MIN,temp=amount[node];
+        //cout<<temp<<endl;
+        for(auto it:graph[node])
+        {
+            if(it==par[node])continue;
+            int dist=maxDistAlice(graph,amount,it);
+            cout<<dist<<endl;
+            ans=max(ans,dist);
+            //cout<<node<<" "<<it<<ans<<endl;
+        }
+        if(ans!=INT_MIN)temp+=ans;
+        return temp;
+    }
+public:
+    int mostProfitablePath(vector<vector<int>>& edges, int bob, vector<int>& amount) {
+        vector<int>graph[amount.size()];
+        int n=amount.size();
+        distFromRoot.resize(n);
+        par.resize(n);par[0]=-1;
+        for(auto it:edges)
+        {
+            graph[it[0]].push_back(it[1]);
+            graph[it[1]].push_back(it[0]);
+        }
+        dfs(0,graph);
+        updateAmount(graph,bob,amount);
+        // for(int i=0;i<n;i++)
+        // {
+        //     cout<<i<<" "<<par[i]<<endl;
+        //     cout<<i<<" "<<distFromRoot[i]<<endl;
+        //     cout<<amount[i]<<endl;
+        // }
+        return maxDistAlice(graph,amount,0);
+    }
+};
