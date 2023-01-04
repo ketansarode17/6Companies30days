@@ -1,0 +1,40 @@
+https://leetcode.com/problems/number-of-ways-to-arrive-at-destination/description/
+
+#define mod 1000000007
+class Solution {
+    private:
+    vector<int>vis;
+public:
+    int countPaths(int n, vector<vector<int>>& roads) {
+        vector<pair<int,int>>graph[n];
+        vis.resize(n,0);
+        for(auto it:roads)
+        {
+            graph[it[0]].push_back({it[1],it[2]});
+            graph[it[1]].push_back({it[0],it[2]});
+        }
+        vector<long long>ways(n);
+        vector<long long>dist(n,LONG_LONG_MAX);
+        dist[0]=0;ways[0]=1;
+        priority_queue<pair<long long,int>,vector<pair<long long,int>>,greater<pair<long long,int>>>pq;
+        pq.push({0,0});
+        while(!pq.empty())
+        {
+            long long dis=pq.top().first;
+            int node=pq.top().second;
+            pq.pop();
+            for(auto adj:graph[node])
+            {
+                if(dist[adj.first]>dis+adj.second)
+                {
+                    dist[adj.first]=dis+adj.second;
+                    ways[adj.first]=ways[node]%mod;
+                    pq.push({dist[adj.first],adj.first});
+                }
+                else if(dist[adj.first]==dis+adj.second)
+                ways[adj.first]=(ways[adj.first]%mod+ways[node]%mod)%mod;
+            }
+        }
+        return ways[n-1];
+    }
+};
