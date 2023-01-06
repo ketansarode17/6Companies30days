@@ -1,0 +1,39 @@
+https://leetcode.com/problems/valid-square/
+
+Properties to be checked :-
+1.All sides of sqaure are equal and
+2.Diagonal lengths must be equal.
+
+Naive/Brute Force :-
+Suppose you are provided with 4 points so we can compute all the permutations of those 4 points and
+then for each permutation we will check whether the permutation satisfies the properties or not and return result accordingly.
+But to generate all permutations we will end up taking O(4!) T.C.
+
+Optimized approach :-
+Here we are not needed to compute all 24 possible permutations if we draw all permutations then we can observe 2 permutations of points
+results in same sides and diagonals of the sqaure.
+for eg.p1,p2,p3,p4 has sides p1p2,p2p3,p3p4,p4p1 and diagonals p1p3,p2p4.
+now lets see for p2p3p4p1 it has sides p2p3,p3p4,p4p1,p1p2 and diagonals p2p4,p1p3.
+hence we can see that both produces same sides and it is enough to check for 1 permutation.
+
+Hence we can find out that there are only 3 permutations that produces unique sides,diagonals
+i.e
+p1,p2,p3,p4
+p1,p2,p4,p3
+p1,p3,p2,p4
+
+class Solution {
+    private:
+    long long dist(vector<int>&vc1,vector<int>&vc2)
+    {
+        return (vc2[0]-vc1[0])*1LL*(vc2[0]-vc1[0])+(vc2[1]-vc1[1])*1LL*(vc2[1]-vc1[1]);
+    }
+    bool isValid(vector<int>&p1,vector<int>&p2,vector<int>&p3,vector<int>&p4)
+    {
+        return dist(p1,p2)&&dist(p1,p3)&&(dist(p1,p2)==dist(p2,p3) and dist(p2,p3)==dist(p3,p4) and dist(p3,p4)==dist(p4,p1) and dist(p1,p3)==dist(p2,p4));
+    }
+public:
+    bool validSquare(vector<int>& p1, vector<int>& p2, vector<int>& p3, vector<int>& p4) {
+        return (isValid(p1,p2,p3,p4) or isValid(p1,p2,p4,p3) or isValid(p1,p3,p2,p4));
+    }
+};
