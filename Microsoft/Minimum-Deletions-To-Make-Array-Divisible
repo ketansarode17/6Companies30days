@@ -1,0 +1,31 @@
+https://leetcode.com/problems/minimum-deletions-to-make-array-divisible/description/
+
+class Solution {
+public:
+    int minOperations(vector<int>& nums, vector<int>& numsDivide) {
+        int g=0;
+        unordered_map<int,int>mp;
+        for(auto it:numsDivide){g=__gcd(g,it);}
+        for(auto it:nums)mp[it]++;
+        if(mp[1])return 0;
+        int minDiv=g;
+        for(int i=2;i*i<=g;i++)
+        {
+            //int temp=g;
+            cout<<i<<endl;
+            if(g%i==0)
+            {
+                if(mp[i])minDiv=min(minDiv,i);
+                if(mp[g/i])minDiv=min(minDiv,g/i);
+            }
+        }
+        int ans=0;
+        sort(nums.begin(),nums.end());
+        for(auto it:nums)
+        {
+            if(it==minDiv)return ans;
+            ans++;
+        }
+        return -1;
+    }
+};
