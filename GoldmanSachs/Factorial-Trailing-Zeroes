@@ -1,0 +1,32 @@
+https://leetcode.com/problems/factorial-trailing-zeroes/
+
+
+The number of trailing zeroes will occur when one 2 and one 5 will get multiply.
+lets consider 10! = 1*2*3*4*5*6*7*8*9*10 which can be written as multiplication of prime factors as 2^8*3^4*5^2*7
+So we can observe that here power of 2 is greater than power of 5 and it will always be true that power of 2>power of 5.
+So we just need to calculate the number of 5's in the prime factorisation of n!.
+
+consider 28!
+here the number of 5's are (n/5)=5
+But 5 is not correct as 1*2*3*4*....*24*25*26*27*28 here 25 will contribute 2 5's. hence we need to divide by next power of 5 i.e. 25
+similarly 128!
+here 125 will contibute 3 5's so we need to divide the number with 125 as well and so on till we get (n/(5^x)) < 1.
+
+Time Complexity = O(log5(n))
+Formula for number of 5s would be (n/5 + n/25 + n/125 + .......n/5^x)
+the number would be divided by 5^x until we get the division as 1.
+n/5^x=1 => x=log5(n)
+
+Code-
+class Solution {
+public:
+    int trailingZeroes(int n) {
+        int toDiv=5,ans=0;
+        while(n/toDiv>=1)
+        {
+            ans+=(n/toDiv);
+            toDiv*=5;
+        }
+        return ans;
+    }
+};
