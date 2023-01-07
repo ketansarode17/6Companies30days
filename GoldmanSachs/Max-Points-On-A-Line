@@ -1,0 +1,48 @@
+https://leetcode.com/problems/max-points-on-a-line/description/
+
+
+class Solution {
+public:
+    int maxPoints(vector<vector<int>>& points) {
+        int ans=1;
+        for(int i=0;i<points.size();i++)
+        {
+            map<pair<int,int>,int>slopes;
+            for(int j=0;j<points.size();j++)
+            {
+                if(i==j)continue;
+                int dy=points[j][0]-points[i][0];
+                int dx=points[j][1]-points[i][1];
+                if(!dx){dy=1;slopes[{dy,dx}]++;continue;}
+                if(!dy){
+                    dx=1;slopes[{dy,dx}]++;continue;
+                }
+                int gc=__gcd(abs(dy),abs(dx));
+                dy/=gc;dx/=gc;
+                if(dy<0&&dx>=0)
+                {
+                    slopes[{dy,dx}]++;
+                }
+                else if(dy>=0&&dx<0)
+                {
+                    slopes[{-1*dy,-1*dx}]++;
+                }
+                else if(dy<0&&dx<0){
+                    slopes[{-1*dy,-1*dx}]++;
+                }
+                else
+                {
+                    slopes[{dy,dx}]++;
+                }
+            }
+            int cnt=-1;
+            for(auto it:slopes)
+            {
+                cout<<it.first.first<<" "<<it.first.second<<endl;
+                if(it.second>cnt)cnt=it.second;
+            }
+            ans=max(ans,cnt+1);
+        }
+        return ans;
+    }
+};
