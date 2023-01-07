@@ -1,0 +1,26 @@
+https://leetcode.com/problems/gas-station/description/
+
+amount of gas>=amount of cost
+If we the amount of gas is less than the total cost given then the answer will be -1;
+As it is mentioned that the solution is unique and its guaranteed so
+we will traverse the array and declare the curr_gas variable and add (gas[i]-cost[i])
+if it becomes negative then we simply increment start to i+1 as we cannot start from previous position.
+
+class Solution {
+public:
+    int canCompleteCircuit(vector<int>& gas, vector<int>& cost) {
+        int cst=accumulate(cost.begin(),cost.end(),0);
+        int gs=accumulate(gas.begin(),gas.end(),0);
+        if(gs<cst)return -1;
+        int start=0,curr_gas=0;
+        for(int i=0;i<gas.size();i++)
+        {
+            curr_gas+=gas[i]-cost[i];
+            if(curr_gas<0)
+            {
+                curr_gas=0;start=i+1;
+            }
+        }
+        return start;
+    }
+};
