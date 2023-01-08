@@ -1,0 +1,40 @@
+C. Make number of distinct characters equal
+Intuition :-
+As word1 and word2 consists of lowercase letters,we can loop and check if a character is present in word1 if it is present then similarly we loop for word2 and
+get the character that is present in it. we swap them by updating map values. 
+then we check the unique character count in both words(maps) if the counts are same then we return true.
+else we again restore the map values which we updated and continue with further characters.
+
+T.C. :- O(26*26*26)
+
+Code:-
+class Solution {
+public:
+    bool isItPossible(string word1, string word2) {
+        unordered_map<char,int>mp1,mp2;
+        for(auto it:word1)mp1[it]++;
+        for(auto it:word2)mp2[it]++;
+        for(char i='a';i<='z';i++)
+        {
+            if(!mp1[i])continue;
+            for(char j='a';j<='z';j++)
+            {
+                if(mp2[j])
+                {
+                    mp1[i]--;mp2[j]--;mp1[j]++;mp2[i]++;
+                    int cnt1=0,cnt2=0;
+                    for(char x='a';x<='z';x++)
+                    {
+                        if(mp1[x])cnt1++;if(mp2[x])cnt2++;
+                    }
+                    if(cnt1==cnt2)return true;
+                    mp1[i]++;mp2[j]++;mp1[j]--;mp2[i]--;
+                }
+            }
+        }
+        return false;
+    }
+};
+
+
+
