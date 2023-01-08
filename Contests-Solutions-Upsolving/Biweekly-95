@@ -1,0 +1,24 @@
+2527.Find Xor Beauty Of an array.
+
+Intuition:- The answer will be simply Xor of all the elements in array
+because let's consider an array with 2 numbers {a,b}
+number of possiblities = 
+(a|a)&a=a    (b|b)&b = b    XOR=a^b
+(a|b)&a      (b|a)&a        XOR=0
+(a|b)&b      (b|a)&b        XOR=0
+(a|a)&b=a&b  (b|b)&a = b&a  XOR=0
+
+We are getting same values and the their xor will be 0 only the xor of a and b is left.
+Hence for n numbers the ans will be xor of those n values.
+
+Code:-
+class Solution {
+public:
+    int xorBeauty(vector<int>& nums) {
+        int ans=0;
+        for(auto it:nums)ans^=it;
+        return ans;
+    }
+};
+
+
