@@ -1,0 +1,27 @@
+https://leetcode.com/problems/non-overlapping-intervals/description/
+
+Intuition : - 
+First sort all the intervals in asc order. Then iterate over the array of intervals and check if there is intersection with the last interval
+If there is no intersection then update the endpt of last interval to current endpt.
+else update endpt to min(last_endpt,curr_interval_endpt)
+
+class Solution {
+public:
+    int eraseOverlapIntervals(vector<vector<int>>& intervals) {
+        sort(intervals.begin(),intervals.end());
+        int ans=0,end=intervals[0][1];
+        for(int i=1;i<intervals.size();i++)
+        {
+            if(intervals[i][0]>=end)
+            {
+                end=intervals[i][1];
+            }
+            else
+            {
+                ans++;
+                end=min(end,intervals[i][1]);
+            }
+        }
+        return ans;
+    }
+};
