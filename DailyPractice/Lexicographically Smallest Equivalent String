@@ -1,0 +1,43 @@
+https://leetcode.com/problems/lexicographically-smallest-equivalent-string/description/
+
+Used disjoint set to store the parent i.e. the smallest equivalent character is stored as parent of that component.
+when 2 characters are to be merged then we will mark parent as the smaller one among the two as we want smallest string.
+size of parent will be 26 as there are only lowercase alphabets.
+Then iterated over baseStr string and replaced its each index value with parent[baseStr[i]]
+
+class Solution {
+    private:
+    vector<int>par;
+    int get_par(int node)
+    {
+        if(par[node]==node)return node;
+        return par[node]=get_par(par[node]);
+    }
+    void union_(char x,char y)
+    {
+        int par_x=get_par(x-'a');
+        int par_y=get_par(y-'a');
+        //cout<<x<<" "<<y<<" "<<(char)(97+par_x)<<" "<<(char)(97+par_y)<<endl;
+        if(par_x==par_y)return;
+        if(par_x<par_y)
+        {
+            par[par_y]=par_x;
+        }
+        else if(par_x>par_y)
+        {
+            par[par_x]=par_y;
+        }
+    }
+public:
+    string smallestEquivalentString(string s1, string s2, string baseStr) {
+        par.resize(26);
+        for(int i=0;i<26;i++)par[i]=i;
+        for(int i=0;i<s1.size();i++)
+        {
+            union_(s1[i],s2[i]);
+        }
+        //for(int i=0;i<26;i++)cout<<(char)(97+i)<<" "<<(char)(97+par[i])<<endl;
+        for(int i=0;i<baseStr.size();i++)baseStr[i]=(char)(97+get_par(baseStr[i]-'a'));
+        return baseStr;
+    }
+};
