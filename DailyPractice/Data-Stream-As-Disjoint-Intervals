@@ -1,0 +1,54 @@
+https://leetcode.com/problems/data-stream-as-disjoint-intervals/description/
+
+Note: an interval is formed by consecutive set of integers. like a,a+1,..
+In this problem we will be using set data structure to store the values of addNum call.
+Consider a test case:
+["SummaryRanges", "addNum", "getIntervals", "addNum", "getIntervals", "addNum", "getIntervals", "addNum", "getIntervals", "addNum", "getIntervals"]
+[[], [1], [], [3], [], [7], [], [2], [], [6], []]
+
+1.addNum -> set : 1
+2.getIntervals :
+first set two pointers left and right to -1.Then iterate over values of set and check 
+i.if the left pointer value is -1 then set left and right to that value in set.
+ii.
+a. if current value of set = right + 1.Then set right to this value of set as it is a part of interval.(increasing in consecutive order)
+b.else insert a vector with {left,right}. and reset left and right both to current value of set as it marks the new begining of interval.
+
+Code :-
+class SummaryRanges {
+    private:
+    set<int>st;
+public:
+    SummaryRanges() {
+        
+    }
+    
+    void addNum(int value) {
+        st.insert(value);
+    }
+    
+    vector<vector<int>> getIntervals() {
+        if(!st.size())return {};
+        vector<vector<int>>ans;
+        int l=-1,r=-1;
+        for(auto it:st)
+        {
+            if(l==-1)
+            {
+                l=r=it;
+            }
+            else if(it==r+1)
+            {
+                r=it;
+            }
+            else
+            {
+                ans.push_back({l,r});
+                l=r=it;
+            }
+        }
+        ans.push_back({l,r});
+        return ans;
+    }
+};
+
